@@ -1,11 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
 <head>
-    <meta charset="UTF-8">
-    <title>start</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="public/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <link rel="stylesheet" href="public/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/css/app.css">
+    <!--    <script src="public/js/echarts.min.js"></script>-->
 </head>
-<body>
-    <h1>hello boys 2</h1>
+<body data-type="index">
+
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        凡米体温监测系统
+    </div>
+</header>
+<div class="tpl-page-container tpl-page-header-fixed">
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-title">
+            成都市XX制造厂
+        </div>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="/monitor" class="nav-link tpl-left-nav-link-list  active">
+                        <i class="am-icon-dashboard"></i>
+                        <span>数据展示</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="/login" class="nav-link tpl-left-nav-link-list">
+                        <i class="am-icon-database"></i>
+                        <span>信息录入</span>
+
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="tpl-content-wrapper">
+        <div class="row">
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-comments-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number" id="user-count" th:text="${userInfos.UserCount}"></div>
+                        <div class="desc"> 总人数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat green">
+                    <div class="visual">
+                        <i class="am-icon-bar-chart-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number" id="actual-user-count" th:text="${userInfos.todayCount}"></div>
+                        <div class="desc"> 到岗人数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-apple"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number" id="faver-count" th:text="${userInfos.feverUser}"></div>
+                        <div class="desc"> 发烧人数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat purple">
+                    <div class="visual">
+                        <i class="am-icon-android"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number" id="miss-count" th:text="${userInfos.UserCount}-${userInfos.todayCount}">
+                            7
+                        </div>
+                        <div id="miss-user-button" style="cursor:pointer" class="desc" data-am-modal="{target: '#doc-modal-1'}">漏检人员</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="am-u-md-12 am-u-sm-12 row-mb ">
+                <!--此部分数据请在 js文件夹下中的 app.js 中的 “百度图表A” 处修改数据 插件使用的是 百度echarts-->
+                <div class="tpl-echarts tpl-portlet echarts" id="tpl-echarts-A">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="am-u-md-6 am-u-sm-12 row-mb">
+                <div class="tpl-portlet">
+                    <div class="tpl-portlet-title">
+                        <div class="tpl-caption font-green ">
+                            <i class="am-icon-cloud-download"></i>
+                            <span> 实时体温信息</span>
+                        </div>
+                        <div class="actions">
+                            <ul class="actions-btn">
+                                <li class="red desc" id="select-user" style="cursor:pointer"  data-am-modal="{target: '#doc-modal-2'}">选择用户</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <table class="am-table tpl-table" id="sigle-user">
+
+                    </table>
+                </div>
+                <!--此部分数据请在 js文件夹下中的 app.js 中的 “百度图表A” 处修改数据 插件使用的是 百度echarts-->
+                <div class="tpl-echarts tpl-portlet echarts" id="tpl-echarts-B">
+                </div>
+            </div>
+
+            <div class="am-u-md-6 am-u-sm-12 row-mb">
+                <div class="tpl-portlet">
+                    <div class="tpl-portlet-title">
+                        <div class="tpl-caption font-red ">
+                            <i class="am-icon-bar-chart"></i>
+                            <span> 异常体温人员列表</span>
+                        </div>
+                    </div>
+
+                    <table class="am-table tpl-table">
+                        <thead>
+                        <tr>
+                            <td>ID</td>
+                            <td>名字</td>
+                            <td>性别</td>
+                            <td>卡号</td>
+                            <td>部门</td>
+                            <td>体温</td>
+                            <td>时间</td>
+                        </tr>
+                        </thead>
+                        <tbody id="all-temperature-list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">漏检人员列表
+                    <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                </div>
+                <div class="am-modal-bd">
+
+                    <table class="am-table tpl-table">
+                        <thead>
+                        <tr class="tpl-table-uppercase">
+                            <th>id</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>部门</th>
+                        </tr>
+                        </thead>
+                        <tbody id="miss-user-list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-2">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">漏检人员列表
+                    <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+                </div>
+                <div class="am-modal-bd">
+
+                    <table class="am-table tpl-table">
+                        <thead>
+                        <tr class="tpl-table-uppercase">
+                            <th>id</th>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>卡号</th>
+                            <th>部门</th>
+                        </tr>
+                        </thead>
+                        <tbody id="today-user-list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="text" id="sumOfDateInDay" th:value="${userInfos.temperatureList}"/>
+    <input type="text" id="singleUserData" th:value="${userInfos.singleUserData}"/>
+    <input type="text" id="todayUserInfo" th:value="${userInfos.todayUserInfo}"/>
+</div>
+</div>
+<div id="root"></div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="/public/js/app.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script type="text/javascript" src="/public/js/polyfill/rem.min.js"></script>
+<script type="text/javascript" src="/public/js/polyfill/respond.min.js"></script>
+<script type="text/javascript" src="/public/js/amazeui.legacy.js"></script>
+<![endif]-->
+
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/public/js/amazeui.min.js"></script>
+<!--<![endif]-->
 </html>

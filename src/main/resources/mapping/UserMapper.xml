@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanmi.temperature.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.fanmi.temperature.entity.User">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="card_id" jdbcType="VARCHAR" property="cardId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="ext_info" jdbcType="VARCHAR" property="extInfo"/>
+    </resultMap>
+
+    <resultMap id="TemperatureResultMap" type="com.fanmi.temperature.entity.Temperature">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="temperature" jdbcType="VARCHAR" property="temperature"/>
+    </resultMap>
+
+    <resultMap id="UnionBaseResultMap" type="com.fanmi.temperature.entity.UserTemperature">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="card_id" jdbcType="VARCHAR" property="cardId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="ext_info" jdbcType="VARCHAR" property="extInfo"/>
+        <result column="temperature" jdbcType="VARCHAR" property="temperature"/>
+    </resultMap>
+    <select id="selectTemperatureByLimitTime" parameterType="java.util.HashMap" resultMap="TemperatureResultMap">
+        select *  from temperature where id = '${id}' and gmt_create>(select date_sub(now(), interval ${timeUnit} minute));
+    </select>
+
+    <select id="selectUserById" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from user where id = #{id}
+    </select>
+
+    <insert id="insertTemperatureInfo" parameterType="com.fanmi.temperature.entity.Temperature">
+        insert into temperature(id, gmt_create, temperature) values ('${id}',sysdate(),${temperature})
+    </insert>
+
+    <insert id="insertUserInfo" parameterType="com.fanmi.temperature.entity.User">
+        insert into user(id,gmt_create,card_id,name,class_name,ext_info,sex)values (#{id},SYSDATE(),#{cardId},#{name},#{className},#{extInfo},#{sex})
+    </insert>
+
+    <select id="selectAllUserCount" resultType="java.util.Map">
+        select count(*) as count from (select id ,count(*) from user group by id) as newUser;
+    </select>
+
+    <select id="selectTodayAllUserCount" resultType="java.util.Map">
+        select count(*) as count from (select id ,count(*) from temperature where date(gmt_create)=current_date() group by id) as newtemperature;
+    </select>
+
+    <select id="selectFeverUser" resultType="java.util.Map">
+        select count(*) as fever from (select id ,count(*) from temperature where temperature>23 group by id) as fever
+    </select>
+
+    <select id="selectTemperatureOfDay" resultMap="TemperatureResultMap">
+        select t.id,t.gmt_create,t.temperature,u.name from temperature as t inner JOIN user u ON t.id = u.id order by t.gmt_create ;
+    </select>
+
+    <select id="selectTemperatureOfWeek" parameterType="java.lang.String" resultMap="TemperatureResultMap">
+        select * from temperature where date(gmt_create)>DATE_SUB(current_date(),interval 7 day ) and id=#{id};
+    </select>
+
+    <select id="selectUserAndTemperature">
+        select t.id,u.name,u.sex,u.class_name,u.card_id,t.temperature,u.ext_info from (select * FROM temperature t where date(gmt_create)=current_date()) as t  inner JOIN user u ON t.id = u.id
+    </select>
+
+    <select id="selectMissUsers" resultMap="BaseResultMap">
+        select * from user where id not in (select id from temperature)
+    </select>
+
+    <select id="selectTodayFeverUsers" resultMap="UnionBaseResultMap">
+        select t.id,u.name,u.sex,u.class_name,u.card_id,t.temperature,t.gmt_create from (select * FROM temperature t where date(gmt_create)=current_date() and temperature>37.2) as t  inner JOIN user u ON t.id = u.id
+    </select>
+
+    <select id="selectTodayAllUsers" resultMap="BaseResultMap">
+        select * from user where id in (select id from temperature where date(gmt_create)=current_date());
+    </select>
+</mapper>

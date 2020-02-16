@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Amaze UI Admin index Examples</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="icon" type="image/png" href="public/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="public/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
+    <link rel="stylesheet" href="public/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="public/css/admin.css">
+    <link rel="stylesheet" href="public/css/app.css">
+<!--    <script src="public/js/echarts.min.js"></script>-->
+</head>
+<body data-type="index">
+
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        凡米体温监测系统
+    </div>
+</header>
+<div class="tpl-page-container tpl-page-header-fixed">
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-title">
+            成都市XX制造厂
+        </div>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="/monitor" class="nav-link tpl-left-nav-link-list ">
+                        <i class="am-icon-dashboard"></i>
+                        <span>数据展示</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="/login" class="nav-link tpl-left-nav-link-list active">
+                        <i class="am-icon-database"></i>
+                        <span>信息录入</span>
+
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="tpl-content-wrapper">
+        <div class="am-alert   am-alert-success" style="display: none">
+            <button type="button" class="am-close">&times;</button>
+            <p>新增用户成功</p>
+        </div>
+        <div class="tpl-block ">
+            <div class="am-g tpl-amazeui-form">
+                <div class="am-u-sm-12 am-u-md-9">
+                    <form class="am-form am-form-horizontal" action="/login" method="post">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label">姓名 / Name</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="user-name" name="name" placeholder="姓名 / Name" required>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-id" class="am-u-sm-3 am-form-label">编号 / ID</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="user-id" name="id" placeholder="输入员工编号" required>
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-unit" class="am-u-sm-3 am-form-label">部门 / Department</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="user-unit" name="className" placeholder="输入你的部门" required>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-ext" class="am-u-sm-3 am-form-label">备注 / comment</label>
+                            <div class="am-u-sm-9">
+                                <input type="text" id="user-ext" name="extInfo" placeholder="备注">
+                            </div>
+                        </div>
+
+                        <div class="am-form-group">
+                            <label for="user-sex" class="am-u-sm-3 am-form-label">性别 / sex</label>
+                            <div class="am-u-sm-9">
+                                <div class="am-form-group" id="user-sex">
+                                    <label class="am-radio-inline">
+                                        <input type="radio" value="1" name="sex" checked> 男
+                                    </label>
+                                    <label class="am-radio-inline">
+                                        <input type="radio" value="0" name="sex"> 女
+                                        <div id="isSuccess" hidden th:text="${isSuccess}"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button type="submit" class="am-btn am-btn-primary">录入</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="/public/js/amazeui.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+<script src="/public/js/login.js"></script>
+<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="/public/js/polyfill/rem.min.js"></script>
+<script src="/public/js/polyfill/respond.min.js"></script>
+<script src="/public/js/amazeui.legacy.js"></script>
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="/public/js/amazeui.min.js"></script>
+<!--<![endif]-->
+</html>
