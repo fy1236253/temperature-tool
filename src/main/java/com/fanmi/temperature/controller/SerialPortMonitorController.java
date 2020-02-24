@@ -1,8 +1,8 @@
 package com.fanmi.temperature.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.fanmi.temperature.entity.Temperature;
 import com.fanmi.temperature.entity.User;
+import com.fanmi.temperature.entity.UserTemperature;
 import com.fanmi.temperature.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,13 +45,32 @@ public class SerialPortMonitorController {
         return JSON.toJSONString(userService.findTodayAllUsers());
     }
     /***
+     *  获取当天发烧人员
+     * @return
+     */
+    @RequestMapping(value = {"/today/fever/list"},method = {RequestMethod.GET})
+    @ResponseBody
+    public String getTodayFeverUserInfos(ModelMap model){
+        return JSON.toJSONString(userService.findTodayFeverUserTemperature());
+    }
+
+
+    /***
      *  获取整体人员数据
      * @return
      */
-    @RequestMapping(value = {"/temperature/{id}"},method = {RequestMethod.GET})
+    @RequestMapping(value = {"/temperature/fever/list"},method = {RequestMethod.GET})
     @ResponseBody
-    public String getUserTemperature(@PathVariable("id")String id){
-        List<Temperature> userInfo = userService.findTemperatureOfDay();
+    public String getUserTemperature(){
+        return JSON.toJSONString(userService.findTodayFeverUserTemperature());
+    }    /***
+     *  获取当天温度数据
+     * @return
+     */
+    @RequestMapping(value = {"/temperature/today/{id}"},method = {RequestMethod.GET})
+    @ResponseBody
+    public String getTodayTemperature(@PathVariable("id")String id){
+        List<UserTemperature> userInfo = userService.findUserTemperatureOfDay(id);
         return JSON.toJSONString(userInfo);
     }
     /***
@@ -74,10 +93,9 @@ public class SerialPortMonitorController {
     @ResponseBody
     public String getEchartDate( @PathVariable("id") String id){
         System.out.println(id);
-        List<Temperature> temperatureList = null;
+        List<UserTemperature> temperatureList = null;
         if ("all".equals(id)){
             temperatureList = userService.findTemperatureOfDay();
-            System.out.println(temperatureList.size());
         }else {
             temperatureList = userService.findTemperatureOfWeek(id);
         }
@@ -86,7 +104,11 @@ public class SerialPortMonitorController {
 
     @RequestMapping("/miss/users")
     public String getMissUsers(){
-        List<User> userList = userService.findMissUsers();
+        List<User> userList = null;
+        Long todayCount = (Long) userService.findTodayUserCount().get("count");
+
+        userList = userService.findMissUsers();
+
         return JSON.toJSONString(userList);
     }
 
